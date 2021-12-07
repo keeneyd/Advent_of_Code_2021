@@ -21,7 +21,6 @@ def part_one(filename):
             y -= int(val)
     return x * y
 
-#in rolling 3 depth avg, middle 2 numbers will always be same, so compare depth[i] to depth[i+3]
 def part_two(filename):
     path = relative_path(filename)
     x = 0
