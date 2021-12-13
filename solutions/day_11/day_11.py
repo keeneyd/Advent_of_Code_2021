@@ -15,8 +15,6 @@ def get_data(filename):
         lines = [[int(x) for x in line] for line in lines]
     return lines
 
-test = get_data('day_11_test')
-
 class energy_grid:
     def __init__(self, grid_list) -> None:
         self.length = len(grid_list)
