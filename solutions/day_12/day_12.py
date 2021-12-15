@@ -1,6 +1,6 @@
 from os import sep
 from pathlib import Path
-import statistics as stat
+from collections import defaultdict
 
 def relative_path(filename):
     try:
@@ -12,7 +12,7 @@ def get_data(filename):
     path = relative_path(filename)
     with open(file=path, mode='r') as data:
         lines = [d.replace('\n','').split('-') for d in data]
-        options = {}
+        options = defaultdict(list)
         for key, value in lines:
             existing_value = options.get(key,[])
             existing_value.append(value)
@@ -24,15 +24,26 @@ def get_data(filename):
                 options[value] = reverse_value
     return options
 
+def path_count(map, path=['start']):
+    count = 0
+    for point in map[path[-1]]:
+        if point.isupper() or not point in path:
+            count += 1 if point == 'end' else path_count(map, path + [point])
+    return count
 
-def find_next(map, path=['start']):
-    if path[-1] == 'end':
-        return [path]
-    try:    
-        next_steps = map[path[-1]]
-        return [path + [step] for step in next_steps  if step.isupper() or step not in path]
-    except KeyError:
-        return [path]
+def alt_count(map, path=['start']):
+    count = 0
+    if double_small(path):
+        for point in map[path[-1]]:
+            if point.isupper() or not point in path:
+                count += 1 if point == 'end' else path_count(map, path + [point])
+    else:
+        for point in map[path[-1]]:
+            if point == 'end':
+                count += 1
+            elif point != 'start':
+                count += alt_count(map, path + [point])
+    return count
 
 def double_small(path):
     smalls = {}
@@ -44,45 +55,13 @@ def double_small(path):
             smalls[p] = 1
     return False
 
-def alt_next(map, path=['start']):
-    if path[-1] == 'end':
-        return [path]
-    try:    
-        next_steps = map[path[-1]]
-        if double_small(path):
-            return [path + [step] for step in next_steps  if step.isupper() or step not in path and step != 'start']
-        else:
-            return [path + [step] for step in next_steps if step != 'start']
-    except KeyError:
-        return [path]
-
 def part_one(filename):
     map = get_data(filename)
-    path_count = 0
-    keep_going  = True
-    paths = find_next(map = map, path = ['start'])
-    while keep_going:
-        temp = []
-        for path in paths:
-            temp.extend(find_next(map = map, path = path))
-        paths = temp
-        keep_going = path_count != len(paths)
-        path_count = len(paths)
-    return path_count
+    return path_count(map)
 
 def part_two(filename):
     map = get_data(filename)
-    path_count = 0
-    keep_going  = True
-    paths = alt_next(map = map, path = ['start'])
-    while keep_going:
-        temp = []
-        for path in paths:
-            temp.extend(alt_next(map = map, path = path))
-        paths = temp
-        keep_going = path_count != len(paths)
-        path_count = len(paths)
-    return path_count
+    return alt_count(map)
 
 if __name__ == '__main__':
     print(f"part one test: {part_one('day_12_test')}")
