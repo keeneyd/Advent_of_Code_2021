@@ -109,9 +109,7 @@ def part_two(filename):
     return dist
 
 if __name__ == '__main__':
-    print(f"part one test: {part_one('day_14_test')}")
-    print(f"part one: {part_one('day_14')}")
-    print(f"part two test: {part_two('day_14_test')}")
-    print(f"part two: {part_two('day_14')}")
-
-
+    print(f"part one test: {part_one('day_15_test')}")
+    print(f"part one: {part_one('day_15')}")
+    print(f"part two test: {part_two('day_15_test')}")
+    print(f"part two: {part_two('day_15')}")
