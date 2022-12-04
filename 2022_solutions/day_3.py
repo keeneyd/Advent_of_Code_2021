@@ -9,7 +9,6 @@ def relative_path(filename):
 
 def read_data(filename):
     path = relative_path(filename)
-    increases = 0
     with open(file=path, mode='r') as data:
         raw = [(x.replace('\n','')) for x in data]
         return raw
