@@ -47,13 +47,6 @@ def part_two(filename):
     overlaps = [check_overlap(a) for a in assignments]
     return sum(overlaps)
 
-data = read_data('day_4_test')
-data
-pairs = [[i.split('-') for i in item] for item in data]
-assignments = [[[int(e) for e in elf]for elf in p]for p in pairs]
-assignments[0]
-
-
 if __name__ == '__main__':
     print(f"part one test: {part_one('day_4_test')}")
     print(f"part one: {part_one('day_4')}")
